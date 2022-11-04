@@ -17,9 +17,9 @@ class ReminderScheduler(
     @Scheduled(cron = "0 * * * * *")
     fun checkReminders() {
         val reminders =
-            reminderRepository.findByTimestampToReminderBeforeAndProcessedIsFalse(Timestamp.from(Instant.now()))
+            reminderRepository.findByDateToReminderBeforeAndProcessedIsFalse(Timestamp.from(Instant.now()))
         reminders
-            .also { log.info("remind for {} tasks", it.size) }
+            .also { log.info("remind for ${it.size} tasks") }
             .forEach {
                 reminderBotService.sendMessage(it.description, it.chatId)
                 it.processed = true

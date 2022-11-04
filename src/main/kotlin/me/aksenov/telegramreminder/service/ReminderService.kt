@@ -1,5 +1,6 @@
 package me.aksenov.telegramreminder.service
 
+import me.aksenov.telegramreminder.logger.Logger
 import me.aksenov.telegramreminder.storage.ReminderRepository
 import me.aksenov.telegramreminder.storage.model.Reminder
 import org.springframework.stereotype.Service
@@ -8,17 +9,17 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Service
-class ReminderService(private val reminderRepository: ReminderRepository) {
+class ReminderService(private val reminderRepository: ReminderRepository) : Logger{
 
     fun parseAndSaveReminder(chatId: Long, text: String) {
         parseTime(text)?.let {
-            reminderRepository.save(
-                Reminder(
-                    chatId = chatId,
-                    description = periodRegex.replaceFirst(text, ""),
-                    timestampToReminder = it
-                )
+            val reminder = Reminder(
+                chatId = chatId,
+                description = periodRegex.replaceFirst(text, ""),
+                dateToReminder = it
             )
+            reminderRepository.save(reminder)
+            log.info("saved $reminder")
         }
     }
 
