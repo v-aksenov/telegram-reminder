@@ -13,9 +13,13 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
 
     fun parseAndSaveReminder(chatId: Long, text: String) {
         parseTime(text)?.let {
+            val description = dayRegex.replace(text, "")
+                .let { tempText -> hourRegex.replace(tempText, "") }
+                .let { tempText -> minuteRegex.replace(tempText, "") }
+                .trim()
             val reminder = Reminder(
                 chatId = chatId,
-                description = periodRegex.replaceFirst(text, ""),
+                description = description,
                 dateToReminder = it
             )
             reminderRepository.save(reminder)
@@ -38,4 +42,3 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
 private val hourRegex: Regex = Regex("\\d+h")
 private val minuteRegex: Regex = Regex("\\d+m")
 private val dayRegex: Regex = Regex("\\d+d")
-private val periodRegex: Regex = Regex("(\\d+d)? (\\d+h)? (\\d+m)?")
