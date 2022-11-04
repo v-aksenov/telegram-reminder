@@ -6,3 +6,6 @@ build: clean
 
 up: build
 	docker-compose up
+
+run: build
+	./gradlew bootRun

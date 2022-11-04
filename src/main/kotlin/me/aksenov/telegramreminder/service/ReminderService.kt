@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit
 @Service
 class ReminderService(private val reminderRepository: ReminderRepository) : Logger {
 
-    fun parseAndSaveReminder(chatId: Long, text: String) {
+    fun parseAndSaveReminder(chatId: Long, text: String): String =
         parseTime(text)?.let {
             val description = dayRegex.replace(text, "")
                 .let { tempText -> hourRegex.replace(tempText, "") }
@@ -24,8 +24,8 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
             )
             reminderRepository.save(reminder)
             log.info("saved $reminder")
-        }
-    }
+            return "Scheduled $description"
+        } ?: "Unable to parse $text"
 
     private fun parseTime(text: String): Timestamp? {
         val days = dayRegex.find(text)?.groupValues?.firstOrNull()?.replace("d", "")?.toLong()
@@ -35,7 +35,7 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
         days?.let { instant.plus(it, ChronoUnit.DAYS) }
         hours?.let { instant.plus(it, ChronoUnit.HOURS) }
         minutes?.let { instant.plus(it, ChronoUnit.MINUTES) }
-        return Timestamp.from(Instant.now()).takeIf { days != null || hours != null || minutes != null }
+        return Timestamp.from(instant).takeIf { days != null || hours != null || minutes != null }
     }
 }
 

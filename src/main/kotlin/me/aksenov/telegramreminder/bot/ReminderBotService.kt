@@ -24,8 +24,8 @@ class ReminderBotService(
     override fun onUpdateReceived(update: Update?) {
         update?.message?.text?.let {
             val chatId = update.message.chat.id
-            reminderService.parseAndSaveReminder(update.message.chat.id, it)
-            sendMessage("successfully scheduled", chatId)
+            val response = reminderService.parseAndSaveReminder(update.message.chat.id, it)
+            sendMessage(response, chatId)
         }
     }
 
