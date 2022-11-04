@@ -1,5 +1,11 @@
 version: "3.7"
 services:
+  bot:
+    build: .
+    restart: always
+    depends_on:
+      - mongo_db
+
   mongo_db:
     image: "mongo:6.0.2-focal"
     restart: always

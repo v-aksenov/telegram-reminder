@@ -9,7 +9,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Service
-class ReminderService(private val reminderRepository: ReminderRepository) : Logger{
+class ReminderService(private val reminderRepository: ReminderRepository) : Logger {
 
     fun parseAndSaveReminder(chatId: Long, text: String) {
         parseTime(text)?.let {
