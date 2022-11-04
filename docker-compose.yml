@@ -5,6 +5,9 @@ services:
     restart: always
     depends_on:
       - mongo_db
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      BOT_USERNAME: ${BOT_USERNAME}
 
   mongo_db:
     image: "mongo:6.0.2-focal"
