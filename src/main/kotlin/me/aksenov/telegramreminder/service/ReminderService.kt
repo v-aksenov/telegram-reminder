@@ -23,9 +23,9 @@ class ReminderService(private val reminderRepository: ReminderRepository) {
     }
 
     private fun parseTime(text: String): Timestamp? {
-        val days = dayRegex.find(text)?.groupValues?.firstOrNull()?.toLong()
-        val hours = hourRegex.find(text)?.groupValues?.firstOrNull()?.toLong()
-        val minutes = minuteRegex.find(text)?.groupValues?.firstOrNull()?.toLong()
+        val days = dayRegex.find(text)?.groupValues?.firstOrNull()?.replace("d", "")?.toLong()
+        val hours = hourRegex.find(text)?.groupValues?.firstOrNull()?.replace("h", "")?.toLong()
+        val minutes = minuteRegex.find(text)?.groupValues?.firstOrNull()?.replace("m", "")?.toLong()
         val instant = Instant.now()
         days?.let { instant.plus(it, ChronoUnit.DAYS) }
         hours?.let { instant.plus(it, ChronoUnit.HOURS) }
