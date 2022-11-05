@@ -32,9 +32,9 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
         val hours = hourRegex.find(text)?.groupValues?.firstOrNull()?.replace("h", "")?.toLong()
         val minutes = minuteRegex.find(text)?.groupValues?.firstOrNull()?.replace("m", "")?.toLong()
         val instant = Instant.now()
-        days?.let { instant.plus(it, ChronoUnit.DAYS) }
-        hours?.let { instant.plus(it, ChronoUnit.HOURS) }
-        minutes?.let { instant.plus(it, ChronoUnit.MINUTES) }
+            .let { it.takeIf { minutes == null } ?: it.plus(minutes!!, ChronoUnit.MINUTES) }
+            .let { it.takeIf { hours == null } ?: it.plus(hours!!, ChronoUnit.HOURS) }
+            .let { it.takeIf { days == null } ?: it.plus(days!!, ChronoUnit.DAYS) }
         return Timestamp.from(instant).takeIf { days != null || hours != null || minutes != null }
     }
 }
