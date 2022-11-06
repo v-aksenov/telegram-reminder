@@ -1,8 +1,7 @@
 package me.aksenov.telegramreminder.service
 
 import me.aksenov.telegramreminder.logger.Logger
-import me.aksenov.telegramreminder.model.Reminder
-import me.aksenov.telegramreminder.storage.ReminderRepository
+import me.aksenov.telegramreminder.service.model.Reminder
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import java.time.Instant

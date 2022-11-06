@@ -1,6 +1,6 @@
 package me.aksenov.telegramreminder.utils
 
-import me.aksenov.telegramreminder.model.Reminder
+import me.aksenov.telegramreminder.service.model.Reminder
 
 fun parseMessageToReminder(chatId: Long, message: String): Reminder {
     val minutes = message.getAmount(minuteRegex)

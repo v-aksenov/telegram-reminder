@@ -2,7 +2,7 @@ package me.aksenov.telegramreminder.scheduler
 
 import me.aksenov.telegramreminder.bot.ReminderBotService
 import me.aksenov.telegramreminder.logger.Logger
-import me.aksenov.telegramreminder.storage.ReminderRepository
+import me.aksenov.telegramreminder.service.ReminderRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.Instant

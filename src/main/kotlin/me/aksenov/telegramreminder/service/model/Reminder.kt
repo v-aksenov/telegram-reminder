@@ -1,4 +1,4 @@
-package me.aksenov.telegramreminder.model
+package me.aksenov.telegramreminder.service.model
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id

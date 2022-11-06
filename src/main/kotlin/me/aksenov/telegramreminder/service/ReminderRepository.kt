@@ -1,6 +1,6 @@
-package me.aksenov.telegramreminder.storage
+package me.aksenov.telegramreminder.service
 
-import me.aksenov.telegramreminder.model.Reminder
+import me.aksenov.telegramreminder.service.model.Reminder
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.MongoRepository
 import java.time.Instant

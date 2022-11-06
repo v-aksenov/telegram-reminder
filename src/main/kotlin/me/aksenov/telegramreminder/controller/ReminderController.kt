@@ -1,6 +1,6 @@
 package me.aksenov.telegramreminder.controller
 
-import me.aksenov.telegramreminder.model.Reminder
+import me.aksenov.telegramreminder.service.model.Reminder
 import me.aksenov.telegramreminder.service.ReminderService
 import org.bson.types.ObjectId
 import org.springframework.web.bind.annotation.DeleteMapping
