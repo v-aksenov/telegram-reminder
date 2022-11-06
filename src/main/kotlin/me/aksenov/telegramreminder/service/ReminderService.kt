@@ -1,44 +1,41 @@
 package me.aksenov.telegramreminder.service
 
 import me.aksenov.telegramreminder.logger.Logger
+import me.aksenov.telegramreminder.model.Reminder
 import me.aksenov.telegramreminder.storage.ReminderRepository
-import me.aksenov.telegramreminder.storage.model.Reminder
+import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
-import java.sql.Timestamp
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Service
 class ReminderService(private val reminderRepository: ReminderRepository) : Logger {
 
-    fun parseAndSaveReminder(chatId: Long, text: String): String =
-        parseTime(text)?.let {
-            val description = dayRegex.replace(text, "")
-                .let { tempText -> hourRegex.replace(tempText, "") }
-                .let { tempText -> minuteRegex.replace(tempText, "") }
-                .trim()
-            val reminder = Reminder(
-                chatId = chatId,
-                description = description,
-                dateToReminder = it
+    fun saveReminder(reminder: Reminder): Reminder {
+        return reminderRepository.save(
+            reminder.copy(
+                timeToReminder = getTimeToReminder(reminder.minutes, reminder.hours)
             )
-            reminderRepository.save(reminder)
-            log.info("saved $reminder")
-            return "Scheduled $description"
-        } ?: "Unable to parse $text"
-
-    private fun parseTime(text: String): Timestamp? {
-        val days = dayRegex.find(text)?.groupValues?.firstOrNull()?.replace("d", "")?.toLong()
-        val hours = hourRegex.find(text)?.groupValues?.firstOrNull()?.replace("h", "")?.toLong()
-        val minutes = minuteRegex.find(text)?.groupValues?.firstOrNull()?.replace("m", "")?.toLong()
-        val instant = Instant.now()
-            .let { it.takeIf { minutes == null } ?: it.plus(minutes!!, ChronoUnit.MINUTES) }
-            .let { it.takeIf { hours == null } ?: it.plus(hours!!, ChronoUnit.HOURS) }
-            .let { it.takeIf { days == null } ?: it.plus(days!!, ChronoUnit.DAYS) }
-        return Timestamp.from(instant).takeIf { days != null || hours != null || minutes != null }
+        )
     }
-}
 
-private val hourRegex: Regex = Regex("\\d+h")
-private val minuteRegex: Regex = Regex("\\d+m")
-private val dayRegex: Regex = Regex("\\d+d")
+    private fun getTimeToReminder(minutes: Long, hours: Long): Instant =
+        if (minutes == 0L && hours == 0L) {
+            throw IllegalArgumentException()
+        } else {
+            Instant.now()
+                .plus(minutes, ChronoUnit.MINUTES)
+                .plus(hours, ChronoUnit.HOURS)
+        }
+
+    fun removeReminder(id: ObjectId) {
+        reminderRepository.deleteById(id)
+    }
+
+    fun getReminders(chatId: Long?): List<Reminder> =
+        if (chatId == null) {
+            reminderRepository.findByProcessedIsFalse()
+        } else {
+            reminderRepository.findByChatIdAndProcessedIsFalse(chatId)
+        }
+}
