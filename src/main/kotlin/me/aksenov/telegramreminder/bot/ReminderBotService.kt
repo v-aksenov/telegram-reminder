@@ -3,6 +3,7 @@ package me.aksenov.telegramreminder.bot
 import me.aksenov.telegramreminder.configuration.TelegramProperties
 import me.aksenov.telegramreminder.logger.Logger
 import me.aksenov.telegramreminder.service.ReminderService
+import me.aksenov.telegramreminder.utils.parseMessageToReminder
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -23,9 +24,17 @@ class ReminderBotService(
 
     override fun onUpdateReceived(update: Update?) {
         update?.message?.text?.let {
-            val chatId = update.message.chat.id
-            val response = reminderService.parseAndSaveReminder(update.message.chat.id, it)
-            sendMessage(response, chatId)
+            handleReminder(update.message.chat.id, it)
+        }
+    }
+
+    private fun handleReminder(chatId: Long, message: String) {
+        try {
+            val reminder = parseMessageToReminder(chatId, message)
+            reminderService.saveReminder(reminder)
+            sendMessage("Scheduled ${reminder.description}", chatId)
+        } catch (e: IllegalArgumentException) {
+            sendMessage("Unable to parse $message", chatId)
         }
     }
 

@@ -21,6 +21,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.telegram:telegrambots:6.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     runtimeOnly("com.pinterest.ktlint:ktlint-core:0.47.1")
 }

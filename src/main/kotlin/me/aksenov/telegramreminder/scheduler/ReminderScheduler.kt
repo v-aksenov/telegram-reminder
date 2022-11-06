@@ -5,7 +5,6 @@ import me.aksenov.telegramreminder.logger.Logger
 import me.aksenov.telegramreminder.storage.ReminderRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.sql.Timestamp
 import java.time.Instant
 
 @Service
@@ -16,8 +15,7 @@ class ReminderScheduler(
 
     @Scheduled(cron = "0 * * * * *")
     fun checkReminders() {
-        val reminders =
-            reminderRepository.findByDateToReminderBeforeAndProcessedIsFalse(Timestamp.from(Instant.now()))
+        val reminders = reminderRepository.findByTimeToReminderBeforeAndProcessedIsFalse(Instant.now())
         reminders
             .also { log.info("remind for ${it.size} tasks") }
             .forEach {

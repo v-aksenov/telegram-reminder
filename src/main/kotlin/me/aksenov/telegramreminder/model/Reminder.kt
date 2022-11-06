@@ -1,10 +1,10 @@
-package me.aksenov.telegramreminder.storage.model
+package me.aksenov.telegramreminder.model
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
-import java.util.Date
+import java.time.Instant
 
 @Document
 data class Reminder(
@@ -13,9 +13,13 @@ data class Reminder(
     @Field
     var processed: Boolean = false,
     @Field
-    val dateToReminder: Date,
+    val timeToReminder: Instant? = null,
     @Field
     val chatId: Long,
     @Field
-    val description: String
+    val description: String,
+    @Field
+    val minutes: Long,
+    @Field
+    val hours: Long
 )
