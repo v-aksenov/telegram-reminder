@@ -10,6 +10,4 @@ interface ReminderRepository : MongoRepository<Reminder, ObjectId> {
     fun findByTimeToReminderBeforeAndProcessedIsFalse(timeToReminder: Instant): List<Reminder>
 
     fun findByChatIdAndProcessedIsFalse(chatId: Long): List<Reminder>
-
-    fun findByProcessedIsFalse(): List<Reminder>
 }

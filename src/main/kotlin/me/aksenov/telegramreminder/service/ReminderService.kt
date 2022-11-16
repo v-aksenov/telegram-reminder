@@ -31,10 +31,5 @@ class ReminderService(private val reminderRepository: ReminderRepository) : Logg
         reminderRepository.deleteById(id)
     }
 
-    fun getReminders(chatId: Long?): List<Reminder> =
-        if (chatId == null) {
-            reminderRepository.findByProcessedIsFalse()
-        } else {
-            reminderRepository.findByChatIdAndProcessedIsFalse(chatId)
-        }
+    fun getReminders(chatId: Long): List<Reminder> = reminderRepository.findByChatIdAndProcessedIsFalse(chatId)
 }
