@@ -10,3 +10,6 @@ up: build
 
 run: build
 	./gradlew bootRun
+
+test: clean
+	./gradlew test
